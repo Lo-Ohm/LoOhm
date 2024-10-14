@@ -10,6 +10,10 @@ from pymongo.server_api import ServerApi
 app = Flask(__name__)
 CORS(app)  # This will enable CORS for all routes
 
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
+
 # MongoDB setup
 uri = "mongodb+srv://LoOhm:OhmLo@loohm.z6ji1.mongodb.net/?retryWrites=true&w=majority&appName=LoOhm" # connection string uri
 client = MongoClient(uri, server_api=ServerApi('1'))
@@ -21,7 +25,7 @@ def get_data():
     data = list(collection.find({}, {'_id': 0}))  # Fetch data from MongoDB
     return jsonify(data)
 
-@app.route('/api/data', methods=['POST'])
+@app.route('/add_data', methods=['POST'])
 def add_data():
     new_data = request.json
     collection.insert_one(new_data)  # Insert new data into MongoDB
@@ -33,4 +37,4 @@ if __name__ == '__main__':
         print("Pinged your deployment. You successfully connected to MongoDB!")
     except Exception as e:
         print(e)
-    app.run(debug=True)
+    app.run()
