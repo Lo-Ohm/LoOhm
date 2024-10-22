@@ -61,8 +61,29 @@ def signup():
     except Exception as e:
         return jsonify({'message': f'An error occurred: {str(e)}'}), 500
 
+#user login - search through database for user and check if password is correct and if not throw error
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
 
+    # Check if all required fields are present
+    if not username or not password:
+        return jsonify({'message': 'Username and password are required.'}), 400
 
+    # Check if the user exists
+    user = user_info_collection.find_one({'username': username})
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+
+    # Check if the password is correct
+    if not check_password_hash(user['password'], password):
+        return jsonify({'message': 'Incorrect password'}), 401
+
+    # Create an access token
+    access_token = create_access_token(identity=username)
+    return jsonify({'access_token': access_token}), 200
 
 
 if __name__ == '__main__':
