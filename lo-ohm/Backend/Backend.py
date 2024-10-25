@@ -46,6 +46,10 @@ def signup():
     # Check if the user already exists
     if user_info_collection.find_one({'username': username}):
         return jsonify({'message': 'Username already exists'}), 400
+    
+    # Check if the email already exists
+    if user_info_collection.find_one({'email': email}):
+        return jsonify({'message': 'Email already exists'}), 400
 
     # Hash the password and store the user data
     hashed_password = generate_password_hash(password)
