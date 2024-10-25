@@ -29,7 +29,7 @@ jobs:
         run: echo "DB_KEY is available"
         env:
           DB_KEY: ${{ secrets.DB_KEY }}
-
+          
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: echo Hello, world!
