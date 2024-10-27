@@ -91,7 +91,7 @@ def login():
     email = user_info_collection.find_one({'email': email})
     if not email:
         return jsonify({'message': 'Email not found'}), 404
-
+      
     # Create an access token
     access_token = create_access_token(identity=username)
     return jsonify({'access_token': access_token}), 200
