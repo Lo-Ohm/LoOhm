@@ -5,6 +5,7 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Signup from './signup';  // Import the Signup component
+import Login from './login';  // Import the Login component
 import Popover from '@mui/material/Popover';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
 
   return (
     <div className="App">
+      <Login />  {/* Render the Login form */}
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" style={{width: "20%", height:"20%"}}/>
         <p>
