@@ -30,6 +30,7 @@ function Signup() {
 
   return (
     <div>
+    <div>
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
         <div>
@@ -65,6 +66,7 @@ function Signup() {
         <button type="submit">Sign Up</button>
       </form>
       {message && <p>{message}</p>}  {/* Display success or error message */}
+    </div>
     </div>
   );
 }
