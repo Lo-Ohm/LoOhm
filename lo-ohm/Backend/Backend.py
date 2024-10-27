@@ -1,6 +1,6 @@
 # do python -m venv venv
 # do venv\Scripts\activate
-# do pip install flask flask-cors pymongo, pip install flask_jwt_extended
+# do pip install flask flask-cors pymongo, pip install flask_jwt_extended, dotenv
 
 from flask import Flask, jsonify, request
 from flask_cors import CORS
@@ -10,10 +10,11 @@ from Database import *
 from werkzeug.security import generate_password_hash, check_password_hash  # For password hashing
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
-
+load_dotenv(dotenv_path='Backend/.env.development.local')
 
 app = Flask(__name__)
-
+app.config['JWT_SECRET_KEY'] = os.getenv("JWT_SECRET_KEY")
+jwt = JWTManager(app)
 
 app.register_blueprint(api_bp)
 app.register_blueprint(math_bp)
@@ -65,8 +66,35 @@ def signup():
     except Exception as e:
         return jsonify({'message': f'An error occurred: {str(e)}'}), 500
 
+#user login - search through database for user and check if password is correct and if not throw error
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
+    email = data.get('email')
 
+    # Check if all required fields are present
+    if not username or not password or not email:
+        return jsonify({'message': 'Username, password, and email are required.'}), 400
 
+    # Check if the user exists
+    user = user_info_collection.find_one({'username': username})
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+
+    # Check if the password is correct
+    if not check_password_hash(user['password'], password):
+        return jsonify({'message': 'Incorrect password'}), 401
+    
+    # Check if the email exists
+    email = user_info_collection.find_one({'email': email})
+    if not email:
+        return jsonify({'message': 'Email not found'}), 404
+
+    # Create an access token
+    access_token = create_access_token(identity=username)
+    return jsonify({'access_token': access_token}), 200
 
 
 if __name__ == '__main__':
