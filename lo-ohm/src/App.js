@@ -9,22 +9,29 @@ import Login from './login';  // Import the Login component
 import Popover from '@mui/material/Popover';
 
 function App() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorElRegister, setAnchorElRegister] = React.useState(null);
+  const [anchorElLogin, setAnchorElLogin] = React.useState(null);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+
+  const handleRegisterClick = (event) => {
+    setAnchorElRegister(event.currentTarget);
+    setAnchorElLogin(null);
+  };
+  const handleLoginClick = (event) => {
+    setAnchorElLogin(event.currentTarget);
+    setAnchorElRegister(null);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleRegisterClose = () => {
+    setAnchorElRegister(null);
+  };
+  const handleLoginClose = () => {
+    setAnchorElLogin(null);
   };
 
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
 
   return (
     <div className="App">
-      <Login />  {/* Render the Login form */}
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" style={{width: "20%", height:"20%"}}/>
         <p>
@@ -32,15 +39,23 @@ function App() {
         </p>
         <header>
         <ButtonGroup variant="outlined" color="black" spacing="0.5rem">
-          <Button aria-describedby={id} onClick={handleClick}>Register</Button>
-            <Popover id={id} open={open} anchorEl={anchorEl} onClose={handleClose}
+          <Button aria-describedby="register-popover" onClick={handleRegisterClick}>Register</Button>
+            <Popover id="register-popover" open={Boolean(anchorElRegister)} anchorEl={anchorElRegister} onClose={handleRegisterClose}
               anchorOrigin={{ vertical: 'bottom', horizontal: 'center',}}
               transformOrigin={{vertical: 'top', horizontal: 'center',}}
             >
             <Signup />  {/* Render the Signup form */}
             </Popover>
-          <Button>Log-In</Button>
+
+            <Button aria-describedby="login-popover" onClick={handleLoginClick}>Log-In</Button>
+          <Popover id="login-popover" open={Boolean(anchorElLogin)} anchorEl={anchorElLogin} onClose={handleLoginClose}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'center',}}
+              transformOrigin={{vertical: 'top', horizontal: 'center',}}
+            >
+            <Login />  {/* Render the Login form */}
+            </Popover>
           </ButtonGroup>
+          
         </header>
 
       </header>
