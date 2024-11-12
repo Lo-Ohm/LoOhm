@@ -1,32 +1,150 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
-  background-color: #ffffff;
-  min-height: 100vh;
+/* Gradient background for the page */
+body {
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: rgb(0, 0, 0);
+  align-items: center;
+  height: 100vh;
+  position: relative; /* Ensures the container is the reference point for absolute positioning */
 }
 
-.App-link {
-  color: #61dafb;
+/* Outer white box container */
+.outer-form-container {
+  background-color: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  position: relative;
+  display: flex;
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Inner form container (login or sign-up form) */
+.form-container {
+  background-color: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  position: relative;
+}
+
+/* Styling for the "Return to Login" button */
+.return-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: transparent;
+  border: none;
+  font-size: 14px;
+  color: #2575fc;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.return-button:hover {
+  text-decoration: underline;
+}
+
+/* Styling for the welcome message */
+h1 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Styling for the logo */
+.App-logo {
+  width: 100px;
+  height: auto;
+  margin-bottom: 20px; /* Ensure space between logo and form */
+}
+
+/* Styling for the form title */
+h2 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Styling for the buttons */
+.button {
+  width: 100%;
+  border-radius: 30px;
+  padding: 15px;
+  font-size: 16px;
+  text-transform: none;
+  margin-top: 10px;
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  color: white;
+  border: none;
+  cursor: pointer; /* This ensures the pointer becomes a hand when hovering over the button */
+}
+
+.button:hover {
+  background: linear-gradient(to right, #2575fc, #6a11cb);
+}
+
+/* Style for form input fields */
+.input-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Focus effect on the input fields */
+input:focus {
+  outline: none;
+  border-color: #6a11cb;
+}
+
+/* Label styling */
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+}
+
+/* Styling for success/error message */
+p {
+  font-size: 14px;
+  color: #e74c3c;
+}
+
+/* Styling for the signup link */
+.signup-link {
+  margin-top: 20px;
+}
+
+.signup-link span {
+  color: #2575fc;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.signup-link span:hover {
+  text-decoration: underline;
+}
+
+.button:hover {
+  background: linear-gradient(to right, #2575fc, #6a11cb);
 }
