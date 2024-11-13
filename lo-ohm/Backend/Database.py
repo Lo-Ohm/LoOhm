@@ -3,7 +3,10 @@ from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 from dotenv import load_dotenv
 
-load_dotenv(dotenv_path='Backend/.env.development.local')
+
+
+# Load .env file
+load_dotenv(dotenv_path='lo-ohm/Backend/global.env')
 
 # MongoDB setup
 uri = os.getenv("MONGODB_URI") # connection string uri
