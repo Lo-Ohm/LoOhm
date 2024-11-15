@@ -34,7 +34,6 @@ def get_data():
     data = list(collection.find({}, {'_id':0}))
     return jsonify(data)
 
-
 #user signup
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -144,6 +143,23 @@ def additem():
         return jsonify({'message': 'Item added successfully'}), 201
     except Exception as e:
         return jsonify({'message': f'An error occurred: {str(e)}'}), 500
+    
+@app.route('/getitems', methods=['GET'])
+def get_items():
+    data = list(collection.find({}))
+    itemary = {}
+    for i in data:
+        itemary.update({i.get('name') : str(i.get('_id'))})
+    print(itemary)
+    return jsonify(itemary)
+
+@app.route('/getia', methods=['GET'])
+def get_ia():
+    data = list(collection.find({}))
+    itemary = {}
+    for i in data:
+        itemary.update({str(i.get('_id')) : [i.get('username'), i.get('name'), i.get('description'), i.get('price'), i.get('location'), i.get('tags'), i.get('image')]})
+    return jsonify(itemary)
 
 if __name__ == '__main__':
     app.run(debug=True)
