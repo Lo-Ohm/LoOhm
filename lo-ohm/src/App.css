@@ -1,6 +1,6 @@
 /* Gradient background for the page */
 body {
-  background: linear-gradient(to right, #6a11cb, #2575fc);
+  background: white;
   font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
@@ -46,7 +46,7 @@ body {
   background-color: transparent;
   border: none;
   font-size: 14px;
-  color: #2575fc;
+  color: #000;
   cursor: pointer;
   font-weight: bold;
 }
@@ -57,10 +57,11 @@ body {
 
 /* Styling for the welcome message */
 h1 {
+  font-family: 'Courier New', Courier, monospace;
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 10px;
-  color: #333;
+  color: #000;
 }
 
 /* Styling for the logo */
@@ -75,7 +76,7 @@ h2 {
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 20px;
-  color: #333;
+  color: #000;
 }
 
 /* Styling for the buttons */
@@ -86,14 +87,16 @@ h2 {
   font-size: 16px;
   text-transform: none;
   margin-top: 10px;
-  background: linear-gradient(to right, #6a11cb, #2575fc);
+  background: black;
   color: white;
   border: none;
   cursor: pointer; /* This ensures the pointer becomes a hand when hovering over the button */
 }
 
 .button:hover {
-  background: linear-gradient(to right, #2575fc, #6a11cb);
+  background: white;
+  outline: solid black;
+  color: black;
 }
 
 /* Style for form input fields */
@@ -127,7 +130,7 @@ label {
 /* Styling for success/error message */
 p {
   font-size: 14px;
-  color: #e74c3c;
+  color: black;
 }
 
 /* Styling for the signup link */
@@ -145,6 +148,9 @@ p {
   text-decoration: underline;
 }
 
-.button:hover {
-  background: linear-gradient(to right, #2575fc, #6a11cb);
+
+/* Styling for Catalogue */
+.catalogue-header{
+  
 }
+

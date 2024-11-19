@@ -34,6 +34,9 @@ function Login() {
   const handleSignupClick = () => {
     navigate('/signup');  // Navigate to the /signup route
   };
+  const handleCatalogueClick = () => {
+    navigate('/catalogue');  // Navigate to the /signup route
+  };
 
   return (
     <div className="form-container">
@@ -73,6 +76,9 @@ function Login() {
 
       <p className="signup-link">
         Click <span onClick={handleSignupClick}>here</span> to sign up!
+      </p>
+      <p className="catalogue-link">
+        Click <span onClick={handleCatalogueClick}>here</span> to sign up!
       </p>
     </div>
   );
