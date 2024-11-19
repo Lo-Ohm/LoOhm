@@ -13,7 +13,7 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 
-load_dotenv(dotenv_path='lo-ohm/Backend/global.env')
+load_dotenv(dotenv_path='Backend/global.env')
 
 print(os.getenv("TEST_VAR"))
 
