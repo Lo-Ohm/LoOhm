@@ -12,7 +12,7 @@ from werkzeug.security import generate_password_hash, check_password_hash  # For
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
 
-load_dotenv(dotenv_path='lo-ohm/Backend/global.env')
+load_dotenv(dotenv_path='global.env')
 
 
 app = Flask(__name__)
@@ -33,7 +33,6 @@ def hello_world():
 def get_data():
     data = list(collection.find({}, {'_id':0}))
     return jsonify(data)
-
 
 #user signup
 @app.route('/signup', methods=['POST'])
@@ -115,6 +114,52 @@ def login():
     access_token = create_access_token(identity=user['username'])
     return jsonify({'message': 'Login successful', 'access_token': access_token}), 200
 
+#------------------------ INVENTORY ------------------------#
+@app.route('/additem', methods=['POST'])
+def additem():
+    data = request.json
+    username = data.get('username')
+    name = data.get('name')
+    description = data.get('description')
+    price = data.get('price')
+    location = data.get('location')
+    tags = data.get('tags')
+    image = data.get('image')
+
+    # Check if all required fields are present
+    if not username or not name or not description or not price or not location or not tags or not image:
+        return jsonify({'message': 'Username, item name, description, price, location, tags, and image url are required.'}), 400
+
+    try:
+        collection.insert_one({
+            'username': username,
+            'name': name,
+            'description': description,
+            'price': price,
+            'location': location,
+            'tags': tags,
+            'image': image
+        })
+        return jsonify({'message': 'Item added successfully'}), 201
+    except Exception as e:
+        return jsonify({'message': f'An error occurred: {str(e)}'}), 500
+    
+@app.route('/getitems', methods=['GET'])
+def get_items():
+    data = list(collection.find({}))
+    itemary = {}
+    for i in data:
+        itemary.update({i.get('name') : str(i.get('_id'))})
+    print(itemary)
+    return jsonify(itemary)
+
+@app.route('/getia', methods=['GET'])
+def get_ia():
+    data = list(collection.find({}))
+    itemary = {}
+    for i in data:
+        itemary.update({str(i.get('_id')) : [i.get('username'), i.get('name'), i.get('description'), i.get('price'), i.get('location'), i.get('tags'), i.get('image')]})
+    return jsonify(itemary)
 
 if __name__ == '__main__':
     app.run(debug=True)
