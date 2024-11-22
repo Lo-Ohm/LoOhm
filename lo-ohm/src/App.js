@@ -6,6 +6,7 @@ import Popover from '@mui/material/Popover';
 import Signup from './signup';  // Import the Signup component
 import Login from './login';  // Import the Login component
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import Catalogue from './catalogue';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           {/* Define Routes */}
           <Routes>
             <Route path="/" element={<Login />} />
+            <Route path="/catalogue" element={<Catalogue />} />
             <Route path="/signup" element={<Signup />} />
           </Routes>
         </header>

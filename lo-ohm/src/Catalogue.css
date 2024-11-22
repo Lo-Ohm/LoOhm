@@ -1,0 +1,99 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  
+  .catalogue-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .cat-header {
+    position: sticky;
+    top: 0;
+    background-color: #000000;
+    color: white;
+    z-index: 100;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    width: 100%; /* Ensures header spans full width */
+  }
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+  }
+  
+  .header-logo {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo-image {
+    max-height: 50px;
+    object-fit: contain;
+  }
+  
+  .header-nav {
+    display: flex;
+    justify-content: center;
+    padding: 15px 0;
+    max-width: 100%;
+  }
+  
+  .header-btn {
+    background-color: transparent;
+    color: white;
+    border: none;
+    margin: 0 15px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .header-btn:hover {
+    color: #ddd;
+  }
+  
+  .catalogue-content {
+    flex-grow: 1;
+    padding: 20px;
+    text-align: center;
+    padding-top: 80px;
+  }
+  
+  .content-placeholder {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .product-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .product-table th, 
+  .product-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .product-table thead {
+    background-color: #f2f2f2;
+  }
+  
+  .product-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  .product-image {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+  }
