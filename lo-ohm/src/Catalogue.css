@@ -1,102 +1,142 @@
 body {
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-  }
-  
-  .catalogue-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-  
-  .cat-header {
-    position: sticky;
-    top: 0;
-    background-color: #000000;
-    color: white;
-    z-index: 100;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    width: 100%; /* Ensures header spans full width */
-  }
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
 
-  .header-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 20px;
-  }
-  
-  .header-logo {
-    display: flex;
-    align-items: center;
-  }
-  
-  .logo-image {
-    max-height: 50px;
-    object-fit: contain;
-  }
-  
-  .header-nav {
-    display: flex;
-    justify-content: center;
-    padding: 15px 0;
-    max-width: 100%;
-  }
-  
-  .header-btn {
-    background-color: transparent;
-    color: white;
-    border: none;
-    margin: 0 15px;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 16px;
-    cursor: pointer;
-    transition: color 0.3s ease;
-  }
-  
-  .header-btn:hover {
-    color: #ddd;
-  }
-  
-  .catalogue-content {
-    flex-grow: 1;
-    padding: 20px;
-    text-align: center;
-    padding-top: 80px;
-  }
-  
-  .content-placeholder {
-    max-width: 800px;
-    margin: 0 auto;
-  }
+.catalogue-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 
-  .product-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .product-table th, 
-  .product-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-  }
-  
-  .product-table thead {
-    background-color: #f2f2f2;
-  }
-  
-  .product-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
+.cat-header {
+  position: sticky;
+  top: 0;
+  background-color: #000000;
+  color: white;
+  z-index: 100;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  width: 100%; /* Ensures header spans full width */
+}
 
-  .product-image {
-    max-width: 100px;
-    max-height: 100px;
-    object-fit: cover;
-  }
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-image {
+  max-height: 50px;
+  object-fit: contain;
+}
+
+.header-nav {
+  display: flex;
+  justify-content: center;
+  padding: 15px 0;
+  max-width: 100%;
+}
+
+.header-btn {
+  background-color: transparent;
+  color: white;
+  border: none;
+  margin: 0 15px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 16px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.header-btn:hover {
+  color: #ddd;
+}
+
+.catalogue-content {
+  flex-grow: 1;
+  padding: 20px;
+  text-align: center;
+  padding-top: 80px;
+}
+
+.content-placeholder {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.product-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.product-table th, 
+.product-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.product-table thead {
+  background-color: #f2f2f2;
+}
+
+.product-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.product-table th:nth-child(1), /* ID */
+.product-table td:nth-child(1) {
+  width: 5%;
+}
+
+.product-table th:nth-child(2), /* Image */
+.product-table td:nth-child(2) {
+  width: 10%;
+  text-align: center;
+}
+
+.product-table th:nth-child(3), /* Name */
+.product-table td:nth-child(3) {
+  width: 15%;
+}
+
+.product-table th:nth-child(4), /* Description */
+.product-table td:nth-child(4) {
+  width: 25%;
+}
+
+.product-table th:nth-child(5), /* Price */
+.product-table td:nth-child(5) {
+  width: 10%;
+}
+
+.product-table th:nth-child(6), /* Category */
+.product-table td:nth-child(6) {
+  width: 15%;
+}
+
+.product-table th:nth-child(7), /* Location */
+.product-table td:nth-child(7) {
+  width: 15%;
+}
+
+.product-image {
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: cover;
+}
 
   .modal-overlay {
     position: fixed;
