@@ -7,6 +7,7 @@ import axios from 'axios';
 
 function Catalogue() {
     const [tableData, setTableData] = useState([]);
+    const [originalTableData, setOriginalTableData] = useState([]);
     const [sortConfig, setSortConfig] = useState({ 
         key: null, 
         direction: 'ascending' 
@@ -14,6 +15,7 @@ function Catalogue() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
     const [newItem, setNewItem] = useState({
         name: '',
         description: '',
@@ -27,6 +29,22 @@ function Catalogue() {
     useEffect(() => {
         fetchItems();
     }, []);
+
+    // Search effect to filter items based on search term
+    useEffect(() => {
+        if (!searchTerm) {
+            setTableData(originalTableData);
+            return;
+        }
+
+        const lowercasedSearchTerm = searchTerm.toLowerCase();
+        const filteredData = originalTableData.filter(item => 
+            item.name.toLowerCase().includes(lowercasedSearchTerm) ||
+            item.location.toLowerCase().includes(lowercasedSearchTerm)
+        );
+
+        setTableData(filteredData);
+    }, [searchTerm, originalTableData]);
 
     const fetchItems = async () => {
         try {
@@ -51,6 +69,7 @@ function Catalogue() {
             }));
 
             setTableData(formattedData);
+            setOriginalTableData(formattedData);
             setIsLoading(false);
         } catch (err) {
             setError('Failed to fetch items');
@@ -91,6 +110,8 @@ function Catalogue() {
                 tags: '',
                 image: ''
             });
+            // Reset search term
+            setSearchTerm('');
         } catch (err) {
             console.error('Error adding item:', err);
             alert('Failed to add item');
@@ -141,6 +162,17 @@ function Catalogue() {
                 </div>
             </header>
             <main className="catalogue-content">
+                {/* Search Input */}
+                <div className="search-container">
+                    <input
+                        type="text"
+                        placeholder="Search by name or location"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="search-input"
+                    />
+                </div>
+
                 <table className="product-table">
                     <thead>
                         <tr>
@@ -181,14 +213,21 @@ function Catalogue() {
                         ))}
                     </tbody>
                 </table>
+
+                {/* Show message when no results found */}
+                {tableData.length === 0 && (
+                    <div className="no-results">
+                        No items found matching your search.
+                    </div>
+                )}
             </main>
 
-            {/* Floating Add Button */}
+            {/* Rest of the component remains the same */}
             <button 
                 className="floating-add-button" 
                 onClick={() => setIsModalOpen(true)}
             >
-                <img src={addsymbol} height={20}></img>
+                <img src={addsymbol} height={20} alt="Add item"></img>
             </button>
 
             {isModalOpen && (
