@@ -155,10 +155,20 @@ def get_items():
 
 @app.route('/getia', methods=['GET'])
 def get_ia():
-    data = list(collection.find({}))
+    data = list(collection.find({}, {'_id': 1, 'username': 1, 'name': 1, 'description': 1, 'price': 1, 'location': 1, 'tags': 1, 'image': 1}))
     itemary = {}
     for i in data:
-        itemary.update({str(i.get('_id')) : [i.get('username'), i.get('name'), i.get('description'), i.get('price'), i.get('location'), i.get('tags'), i.get('image')]})
+        itemary.update({
+            str(i.get('_id')): [
+                i.get('username', 'N/A'),
+                i.get('name', 'N/A'),
+                i.get('description', 'N/A'),
+                i.get('price', 0),
+                i.get('location', 'N/A'),
+                i.get('tags', []),
+                i.get('image', 'N/A')
+            ]
+        })
     return jsonify(itemary)
 
 if __name__ == '__main__':
