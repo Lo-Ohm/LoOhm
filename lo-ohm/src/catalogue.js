@@ -1,8 +1,9 @@
-/* eslint-disable no-restricted-globals */
 import React, { useState, useEffect } from 'react';
 import './Catalogue.css';
 import logo from './LoOhmWh.png';
+import addsymbol from './OhmSA.png';
 import axios from 'axios';
+
 
 function Catalogue() {
     const [tableData, setTableData] = useState([]);
@@ -12,49 +13,89 @@ function Catalogue() {
     });
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [newItem, setNewItem] = useState({
+        name: '',
+        description: '',
+        price: '',
+        location: '',
+        tags: '',
+        image: ''
+    });
 
     // Fetch items from backend when component mounts
     useEffect(() => {
-        const fetchItems = async () => {
-            try {
-                // First, get the item IDs and names
-                const itemsResponse = await axios.get('http://localhost:5000/getitems');
-                const itemNames = itemsResponse.data;
-
-                // Then, get full item details
-                const iaResponse = await axios.get('http://localhost:5000/getia');
-                const itemDetails = iaResponse.data;
-                console.log(itemDetails);
-                // Transform the data into the format we need
-                const formattedData = Object.entries(itemDetails).map(([id, details]) => ({
-                    id: id,
-                    username: details[0],
-                    name: details[1],
-                    description: details[2],
-                    price: details[3],
-                    location: details[4],
-                    category: details[5], // Using tags as category
-                    image: details[6],
-                }));
-
-                console.log("BOMB");
-                console.log(formattedData.id);
-                console.log(formattedData.username);
-                
-                setTableData(formattedData);
-                setIsLoading(false);
-                // eslint-disable-next-line no-restricted-globals
-            } catch (err) {
-                setError('Failed to fetch items');
-                setIsLoading(false);
-                console.error('Error fetching items:', err);
-            }
-            
-
-        };
-
         fetchItems();
     }, []);
+
+    const fetchItems = async () => {
+        try {
+            // First, get the item IDs and names
+            const itemsResponse = await axios.get('http://localhost:5000/getitems');
+            const itemNames = itemsResponse.data;
+
+            // Then, get full item details
+            const iaResponse = await axios.get('http://localhost:5000/getia');
+            const itemDetails = iaResponse.data;
+
+            // Transform the data into the format we need
+            const formattedData = Object.entries(itemDetails).map(([id, details]) => ({
+                id: id,
+                username: details[0],
+                name: details[1],
+                description: details[2],
+                price: details[3],
+                location: details[4],
+                category: details[5], // Using tags as category
+                image: details[6]
+            }));
+
+            setTableData(formattedData);
+            setIsLoading(false);
+        } catch (err) {
+            setError('Failed to fetch items');
+            setIsLoading(false);
+            console.error('Error fetching items:', err);
+        }
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewItem(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    const handleAddItem = async (e) => {
+        e.preventDefault();
+        try {
+            // You might want to get the username from a logged-in user context
+            const itemToAdd = {
+                username: 'currentUser', // Replace with actual username
+                ...newItem
+            };
+
+            await axios.post('http://localhost:5000/additem', itemToAdd);
+            
+            // Refresh the items list
+            await fetchItems();
+
+            // Close the modal and reset the form
+            setIsModalOpen(false);
+            setNewItem({
+                name: '',
+                description: '',
+                price: '',
+                location: '',
+                tags: '',
+                image: ''
+            });
+        } catch (err) {
+            console.error('Error adding item:', err);
+            alert('Failed to add item');
+        }
+    };
 
     const sortTable = (key) => {
         let direction = 'ascending';
@@ -141,6 +182,93 @@ function Catalogue() {
                     </tbody>
                 </table>
             </main>
+
+            {/* Floating Add Button */}
+            <button 
+                className="floating-add-button" 
+                onClick={() => setIsModalOpen(true)}
+            >
+                <img src={addsymbol} height={20}></img>
+            </button>
+
+            {isModalOpen && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <h2>Add New Item</h2>
+                        <form onSubmit={handleAddItem}>
+                            <div className="form-group">
+                                <label>Name:</label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={newItem.name}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Description:</label>
+                                <textarea
+                                    name="description"
+                                    value={newItem.description}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Price:</label>
+                                <input
+                                    type="text"
+                                    name="price"
+                                    value={newItem.price}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Location:</label>
+                                <input
+                                    type="text"
+                                    name="location"
+                                    value={newItem.location}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Tags:</label>
+                                <input
+                                    type="text"
+                                    name="tags"
+                                    value={newItem.tags}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Image URL:</label>
+                                <input
+                                    type="text"
+                                    name="image"
+                                    value={newItem.image}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
+                            <div className="modal-actions">
+                                <button type="submit" className="btn-submit">Add Item</button>
+                                <button 
+                                    type="button" 
+                                    className="btn-cancel"
+                                    onClick={() => setIsModalOpen(false)}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
