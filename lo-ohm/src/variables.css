@@ -1,0 +1,18 @@
+:root {
+    /* Layout */
+    --max-content-width: 2000px;
+    --content-padding: 20px;
+
+    /* Colors */
+    --primary-color: #005503;
+    --primary-hover: #044f09;
+    --background-color: #f4f4f4;
+    --text-color: #333;
+    --border-color: #ddd;
+
+    /* Shadows */
+    --card-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+    /* Border Radius */
+    --border-radius: 8px;
+}

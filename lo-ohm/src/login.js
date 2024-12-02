@@ -24,6 +24,11 @@ function Login() {
 
       const result = await response.json();
       setMessage(result.message);
+      
+      // If login was successful, redirect to catalogue
+      if (response.ok) {
+        navigate('/catalogue');
+      }
     } catch (error) {
       console.error('Error:', error);
       setMessage('An error occurred during login.');
@@ -79,12 +84,6 @@ function Login() {
 
       <p className="signup-link">
         Click <span onClick={handleSignupClick}>here</span> to sign up!
-      </p>
-      <p className="catalogue-link">
-        Click <span onClick={handleCatalogueClick}>here</span> to sign up!
-      </p>
-      <p className="catalogue-link">
-        Click <span onClick={handleChatClick}>here</span> to sign up!
       </p>
     </div>
   );

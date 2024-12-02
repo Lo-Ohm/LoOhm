@@ -1,3 +1,5 @@
+@import './variables.css';
+
 body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
@@ -18,14 +20,20 @@ body {
   color: white;
   z-index: 100;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  width: 100%; /* Ensures header spans full width */
+  width: 100vw; /* Change to viewport width */
+  left: 0; /* Ensure alignment */
+  right: 0; /* Ensure alignment */
 }
 
 .header-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px;
+  padding: var(--content-padding);
+  max-width: var(--max-content-width);
+  margin: 0 auto;    /* Center the header content */
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .header-logo {
@@ -62,9 +70,19 @@ body {
 
 .catalogue-content {
   flex-grow: 1;
-  padding: 20px;
   text-align: center;
-  padding-top: 80px;
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  padding: var(--content-padding);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.catalogue-title {
+  font-size: 2.5em;
+  color: #333;
+  margin-bottom: 20px;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .content-placeholder {
