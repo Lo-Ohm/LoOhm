@@ -16,7 +16,7 @@ import os
 from werkzeug.utils import secure_filename
 import base64
 
-load_dotenv(dotenv_path='lo-ohm/Backend/global.env')
+load_dotenv(dotenv_path='global.env')
 
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = os.getenv("JWT_SECRET_KEY")
@@ -94,7 +94,7 @@ def signup():
     hashed_password = generate_password_hash(password)
 
     # Read the default profile picture and convert to Base64
-    default_pfp_path = os.path.join('uploads', 'pfp.jpg')
+    default_pfp_path = os.path.join('pfp.jpg')
     with open(default_pfp_path, 'rb') as image_file:
         default_pfp_base64 = base64.b64encode(image_file.read()).decode('utf-8')
 
@@ -271,6 +271,13 @@ def get_conversations(username):
         return jsonify(result), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+@app.route('/usernameinfo', methods=['GET'])
+@jwt_required()
+def usernameinfo():
+    current_user = get_jwt_identity()
+    print(current_user)
+    return jsonify(current_user)
 
 @app.route('/profile', methods=['GET'])
 @jwt_required()
