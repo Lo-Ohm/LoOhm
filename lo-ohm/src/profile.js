@@ -124,16 +124,16 @@ function Profile() {
                         {message && <p className="message">{message}</p>}
                         <div className="profile-info">
                             <div className="profile-picture">
-                                <img 
-                                    src={profile.profilePicture ? 
-                                        profile.profilePicture.startsWith('data:image') ? 
-                                            profile.profilePicture : 
-                                            `data:image/jpeg;base64,${profile.profilePicture}` 
-                                        : 'default-profile.png'
-                                    } 
-                                    alt="Profile" 
-                                    className="profile-image"
-                                />
+                            <img 
+                                src={profile.profilePicture ? 
+                                    profile.profilePicture.startsWith('data:image') ? 
+                                        profile.profilePicture : 
+                                        `data:image/jpeg;base64,${profile.profilePicture}` 
+                                    : 'pfp.jpg'  // Use default profile picture
+                                } 
+                                alt="Profile" 
+                                className="profile-image"
+                            />
                                 <input 
                                     type="file" 
                                     accept="image/*" 
