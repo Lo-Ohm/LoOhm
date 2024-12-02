@@ -4,53 +4,38 @@ import logo from './LoOhmWh.png';
 import './chat.css';
 
 function Chat() {
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
+  const [conversations, setConversations] = useState([]);
   const [currentUser, setCurrentUser] = useState('');
   const [recipient, setRecipient] = useState('');
+  const [newMessage, setNewMessage] = useState('');
 
-  // Fetch existing messages when component mounts
   useEffect(() => {
-    fetchMessages();
-  }, []);
+    if (currentUser) {
+      fetchConversations();
+    }
+  }, [currentUser]);
 
-  // Function to fetch messages from backend
-  const fetchMessages = async () => {
+  const fetchConversations = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/getmsg');
-      // Process and set messages
-      const messageData = response.data;
-      const processedMessages = Object.entries(messageData).flatMap(([sender, messages]) => {
-        const processedSenderMessages = [];
-        for (let i = 0; i < messages.length; i += 3) {
-          processedSenderMessages.push({
-            sender: sender,
-            recipient: messages[i],
-            text: messages[i + 1]
-          });
-        }
-        return processedSenderMessages;
-      });
-      setMessages(processedMessages);
+      const response = await axios.get(`http://localhost:5000/chat/conversations/${currentUser}`);
+      setConversations(response.data);
     } catch (error) {
-      console.error('Error fetching messages:', error);
+      console.error('Error fetching conversations:', error);
     }
   };
 
-  // Function to send a message
   const sendMessage = async () => {
-    if (!newMessage.trim()) return;
+    if (!newMessage.trim() || !currentUser || !recipient) return;
 
     try {
-      await axios.post('http://localhost:5000/sendmsg', {
-        sendee: recipient,
+      await axios.post('http://localhost:5000/chat/send', {
         sender: currentUser,
-        messages: newMessage
+        recipient: recipient,
+        content: newMessage
       });
 
-      // Clear input and refresh messages
       setNewMessage('');
-      fetchMessages();
+      fetchConversations();
     } catch (error) {
       console.error('Error sending message:', error);
     }
@@ -81,14 +66,19 @@ function Chat() {
           <h2>Chat</h2>
         </div>
         <div className="chat-messages">
-          {messages.map((msg, index) => (
-            <div 
-              key={index} 
-              className={`message ${msg.sender === currentUser ? 'sent' : 'received'}`}
-            >
-              <span className="message-sender">{msg.sender}</span>
-              <p>{msg.text}</p>
-            </div>
+          {conversations.map((conv) => (
+            conv.messages.map((msg, index) => (
+              <div 
+                key={index}
+                className={`message ${msg.sender === currentUser ? 'sent' : 'received'}`}
+              >
+                <span className="message-sender">{msg.sender}</span>
+                <p>{msg.content}</p>
+                <span className="message-time">
+                  {new Date(msg.timestamp).toLocaleString()}
+                </span>
+              </div>
+            ))
           ))}
         </div>
         <div className="chat-input">

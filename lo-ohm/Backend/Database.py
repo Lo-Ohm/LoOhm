@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 
 # Load .env file
-load_dotenv(dotenv_path='global.env')
+load_dotenv(dotenv_path='Backend/global.env')
 
 # MongoDB setup
 uri = os.getenv("MONGODB_URI") # connection string uri
@@ -15,3 +15,4 @@ db = client['Main_DB']
 collection = db['Info']
 user_info_collection = db['user_info']
 chat_collection = db['chatbox']
+conversations_collection = db['conversations']
