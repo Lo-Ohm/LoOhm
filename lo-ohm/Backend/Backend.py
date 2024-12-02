@@ -14,6 +14,7 @@ from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 import os
 from werkzeug.utils import secure_filename
+import base64
 
 load_dotenv(dotenv_path='Backend/global.env')
 
@@ -39,15 +40,7 @@ app.config['MAIL_DEFAULT_SENDER'] = os.getenv('EMAIL_USER')
 mail = Mail(app)
 serializer = URLSafeTimedSerializer(app.config['JWT_SECRET_KEY'])
 
-UPLOAD_FOLDER = 'uploads'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-# Create uploads directory if it doesn't exist
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+# Remove UPLOAD_FOLDER related code
 
 def send_verification_email(email, token):
     verification_url = f"http://localhost:5000/verify-email/{token}"
@@ -295,7 +288,10 @@ def get_conversations(username):
 @jwt_required()
 def get_profile():
     current_user = get_jwt_identity()
-    user = user_info_collection.find_one({'username': current_user}, {'_id': 0, 'password': 0})
+    user = user_info_collection.find_one(
+        {'username': current_user},
+        {'_id': 0, 'password': 0}
+    )
     return jsonify(user)
 
 @app.route('/profile/picture', methods=['POST'])
@@ -308,20 +304,23 @@ def upload_profile_picture():
     if file.filename == '':
         return jsonify({'message': 'No file selected'}), 400
     
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(filepath)
+    try:
+        # Read image file and convert to base64
+        image_binary = file.read()
+        image_base64 = base64.b64encode(image_binary).decode('utf-8')
         
         current_user = get_jwt_identity()
         user_info_collection.update_one(
             {'username': current_user},
-            {'$set': {'profilePicture': f'/uploads/{filename}'}}
+            {'$set': {'profilePicture': image_base64}}
         )
         
-        return jsonify({'message': 'Profile picture updated', 'pictureUrl': f'/uploads/{filename}'})
-    
-    return jsonify({'message': 'Invalid file type'}), 400
+        return jsonify({
+            'message': 'Profile picture updated',
+            'pictureUrl': image_base64
+        })
+    except Exception as e:
+        return jsonify({'message': f'Error uploading image: {str(e)}'}), 500
 
 @app.route('/profile/update', methods=['POST'])
 @jwt_required()

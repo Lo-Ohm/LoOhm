@@ -13,7 +13,7 @@ function Login() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = { username, password, email };
+    const data = { username, password };
 
     try {
       const response = await fetch('http://localhost:5000/login', {
@@ -25,9 +25,9 @@ function Login() {
       const result = await response.json();
       setMessage(result.message);
       
-      // If login was successful, redirect to catalogue
-      if (response.ok) {
-        navigate('/catalogue');
+      if (response.ok && result.access_token) {
+        localStorage.setItem('token', result.access_token);
+        navigate('/catalogue');  // Changed from '/profile' to '/catalogue'
       }
     } catch (error) {
       console.error('Error:', error);

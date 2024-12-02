@@ -20,8 +20,8 @@ function Header() {
                     <button className="header-btn" onClick={() => navigate('/chat')}>Chat</button>
                     <button className="header-btn" onClick={() => navigate('/profile')}>Profile</button>
                     <button className="header-btn" onClick={() => navigate('/catalogue')}>Products</button>
-                    <button className="header-btn">Categories</button>
                     <button className="header-btn">Cart</button>
+                    <button className="header-btn" onClick={() => navigate('/')}>Logout</button>
                 </nav>
             </div>
         </header>
