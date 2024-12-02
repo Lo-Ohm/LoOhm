@@ -16,7 +16,7 @@ import os
 from werkzeug.utils import secure_filename
 import base64
 
-load_dotenv(dotenv_path='lo-ohm/Backend/global.env')
+load_dotenv(dotenv_path='Backend/global.env')
 
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = os.getenv("JWT_SECRET_KEY")
@@ -84,39 +84,49 @@ def signup():
     if not username or not password or not email:
         return jsonify({'message': 'Username, password, and email are required.'}), 400
 
+    user_check_start = datetime.now()  # Start time for the user query
     if user_info_collection.find_one({'username': username}):
+        user_check_end = datetime.now()
+        print(f"User check took: {user_check_end - user_check_start}")
         return jsonify({'message': 'Username already exists'}), 400
     
+    # Check if the email already exists
+    email_check_start = datetime.now()  # Start time for the email query
     if user_info_collection.find_one({'email': email}):
+        email_check_end = datetime.now()
+        print(f"Email check took: {email_check_end - email_check_start}")
         return jsonify({'message': 'Email already exists'}), 400
 
     # Hash the password and store the user data
     hashed_password = generate_password_hash(password)
 
-    # Read the default profile picture and convert to Base64
-    default_pfp_path = os.path.join('uploads', 'pfp.jpg')
-    with open(default_pfp_path, 'rb') as image_file:
-        default_pfp_base64 = base64.b64encode(image_file.read()).decode('utf-8')
-
     # Insert the user into the database
+    insert_start = datetime.now()  # Start time for the insert operation
     try:
+        # Create verification token
+        token = serializer.dumps(email)
+        
+        # Store user with verification status
         user_info_collection.insert_one({
             'username': username,
             'password': hashed_password,
             'email': email,
-            'is_verified': False,
-            'profilePicture': default_pfp_base64  # Assign default pfp
+            'is_verified': False
         })
 
         # Send verification email
-        token = serializer.dumps(email)
         send_verification_email(email, token)
 
+        insert_end = datetime.now()
+        print(f"Insert took: {insert_end - insert_start}")
         return jsonify({
             'message': 'User created successfully. Please check your email to verify your account.'
         }), 201
     except Exception as e:
+        end_time = datetime.now()
+        print(f"Total time for signup: {end_time - insert_start}")
         return jsonify({'message': f'An error occurred: {str(e)}'}), 500
+
 
 #user login - search through database for user and check if password is correct and if not throw error
 @app.route('/login', methods=['POST'])
