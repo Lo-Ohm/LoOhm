@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 
 # Load .env file
-load_dotenv(dotenv_path='global.env')
+load_dotenv(dotenv_path='Backend/global.env')
 
 # MongoDB setup
 uri = os.getenv("MONGODB_URI") # connection string uri
