@@ -43,52 +43,54 @@ function Chat() {
   };
 
   return (
-    <div className="chat-container">
-      <Header />
-      <main className="chat-content">
+<div className="chat-container">
+    <Header />
+    <div className="chat-content">
         <div className="chat-window">
-          <div className="chat-header">
-            <h2>Chat</h2>
-          </div>
-          <div className="chat-messages">
-            {conversations.map((conv) => (
-              conv.messages.map((msg, index) => (
-                <div 
-                  key={index}
-                  className={`message ${msg.sender === currentUser ? 'sent' : 'received'}`}
-                >
-                  <span className="message-sender">{msg.sender}</span>
-                  <p>{msg.content}</p>
-                  <span className="message-time">
-                    {new Date(msg.timestamp).toLocaleString()}
-                  </span>
-                </div>
-              ))
-            ))}
-          </div>
-          <div className="chat-input">
-            <input
-              type="text"
-              placeholder="Username"
-              value={currentUser}
-              onChange={(e) => setCurrentUser(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Recipient"
-              value={recipient}
-              onChange={(e) => setRecipient(e.target.value)}
-            />
-            <textarea
-              placeholder="Type your message..."
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-            />
-            <button onClick={sendMessage}>Send</button>
-          </div>
+            <div className="chat-header">Chat</div>
+            <div className="chat-messages">
+                {conversations.length > 0 ? (
+                    conversations.map((conv) =>
+                        conv.messages.map((msg, index) => (
+                            <div
+                                key={index}
+                                className={`message ${msg.sender === currentUser ? 'sent' : 'received'}`}
+                            >
+                                <p>{msg.content}</p>
+                                <small>
+                                    {msg.sender} - {new Date(msg.timestamp).toLocaleString()}
+                                </small>
+                            </div>
+                        ))
+                    )
+                ) : (
+                    <p>No messages yet. Start a conversation!</p>
+                )}
+            </div>
+            <div className="chat-input">
+                <input
+                    type="text"
+                    placeholder="Your Username"
+                    value={currentUser}
+                    onChange={(e) => setCurrentUser(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="Recipient's Username"
+                    value={recipient}
+                    onChange={(e) => setRecipient(e.target.value)}
+                />
+                <textarea
+                    placeholder="Type your message..."
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                />
+                <button onClick={sendMessage}>Send</button>
+            </div>
         </div>
-      </main>
     </div>
+</div>
+
   );
 }
 

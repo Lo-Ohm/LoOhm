@@ -6,6 +6,8 @@ import Profile from './profile';  // Add this import
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Catalogue from './catalogue';
 import Chat from './chat';
+import Cart from './cart';
+
 
 function App() {
   return (
@@ -20,6 +22,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/cart" element={<Cart />} />  
           </Routes>
         </header>
       </div>

@@ -25,6 +25,8 @@ function Catalogue() {
         tags: '',
         image: ''
     });
+    const [cart, setCart] = useState([]);
+
 
     const navigate = useNavigate();  // Add this line after your useState declarations
 
@@ -145,6 +147,28 @@ function Catalogue() {
         navigate('/profile');
     };
 
+
+    const handleAddToCart = async (productId) => {
+      try {
+          const token = localStorage.getItem('token');
+          const response = await axios.post(
+              'http://localhost:5000/cart/add',
+              { product_id: productId },
+              { headers: { Authorization: `Bearer ${token}` } }
+          );
+  
+          if (response.status === 200) {
+              setCart(prevCart => [...prevCart, productId]);
+              alert('Product added to cart');
+          }
+      } catch (err) {
+          console.error('Error adding to cart:', err);
+          alert('Failed to add product to cart');
+      }
+  };
+  
+  
+
     if (isLoading) {
         return <div>Loading...</div>;
     }
@@ -172,45 +196,46 @@ function Catalogue() {
                 </div>
 
                 <table className="product-table">
-                    <thead>
-                        <tr>
-                            <th onClick={() => sortTable('id')}>
-                                ID {sortConfig.key === 'id' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
-                            </th>
-                            <th>Image</th>
-                            <th onClick={() => sortTable('name')}>
-                                Name {sortConfig.key === 'name' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
-                            </th>
-                            <th>Description</th>
-                            <th onClick={() => sortTable('price')}>
-                                Price {sortConfig.key === 'price' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
-                            </th>
-                            <th onClick={() => sortTable('category')}>
-                                Category {sortConfig.key === 'category' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
-                            </th>
-                            <th>Location</th>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Category</th>
+                        <th>Location</th>
+                        <th>Actions</th> {/* Column for Add to Cart */}
+                    </tr>
+                </thead>
+                <tbody>
+                    {tableData.map((product) => (
+                        <tr key={product.id}>
+                            <td>{product.id}</td>
+                            <td>
+                                <img
+                                    src={product.image}
+                                    alt={product.name}
+                                    className="product-image"
+                                />
+                            </td>
+                            <td>{product.name}</td>
+                            <td>{product.description}</td>
+                            <td>{product.price}</td>
+                            <td>{product.category}</td>
+                            <td>{product.location}</td>
+                            <td>
+                                <button
+                                    onClick={() => handleAddToCart(product.id)}
+                                    className="add-to-cart-btn"
+                                >
+                                    Add to Cart
+                                </button>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {tableData.map((product) => (
-                            <tr key={product.id}>
-                                <td>{product.id}</td>
-                                <td>
-                                    <img 
-                                        src={product.image} 
-                                        alt={product.name} 
-                                        className="product-image"
-                                    />
-                                </td>
-                                <td>{product.name}</td>
-                                <td>{product.description}</td>
-                                <td>{product.price}</td>
-                                <td>{product.category}</td>
-                                <td>{product.location}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                    ))}
+                </tbody>
+            </table>
 
                 {/* Show message when no results found */}
                 {tableData.length === 0 && (
