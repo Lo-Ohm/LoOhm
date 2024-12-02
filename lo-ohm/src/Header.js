@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import logo from './LoOhmWh.png';
+import './Catalogue.css'
 
 
 function Header() {

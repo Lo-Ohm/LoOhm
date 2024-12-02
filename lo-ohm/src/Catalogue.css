@@ -80,6 +80,9 @@ body {
   padding: 100px var(--content-padding) var(--content-padding); 
   width: 100%;
   box-sizing: border-box;
+  overflow-x: auto; /* Allow horizontal scrolling */
+  max-height: calc(100vh - 80px); /* Account for header height */
+    overflow-y: auto;
 }
 
 
@@ -124,7 +127,7 @@ body {
 
 .product-table th:nth-child(1), /* ID */
 .product-table td:nth-child(1) {
-  width: 5%;
+  width: 13%;
 }
 
 .product-table th:nth-child(2), /* Image */

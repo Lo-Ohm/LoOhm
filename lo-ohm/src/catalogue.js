@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';  // Add this import at the top
 import './Catalogue.css';
-import logo from './LoOhmWh.png';
 import addsymbol from './OhmSA.png';
 import axios from 'axios';
 import Header from './Header';  // Add this import
@@ -178,6 +177,7 @@ function Catalogue() {
     }
 
     return (
+        
         <div className="catalogue-container">
             <Header />
             <main className="catalogue-content">
@@ -198,7 +198,7 @@ function Catalogue() {
                 <table className="product-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>User</th>
                         <th>Image</th>
                         <th>Name</th>
                         <th>Description</th>
@@ -211,7 +211,7 @@ function Catalogue() {
                 <tbody>
                     {tableData.map((product) => (
                         <tr key={product.id}>
-                            <td>{product.id}</td>
+                            <td>{product.username}</td>
                             <td>
                                 <img
                                     src={product.image}
