@@ -221,39 +221,63 @@ def get_ia():
     return jsonify(itemary)
 
 #------------------------ CHATTING ------------------------#
-@app.route('/sendmsg', methods=['POST'])
+@app.route('/chat/send', methods=['POST'])
 def send_message():
     data = request.json
-    sendee = data.get('sendee')
     sender = data.get('sender')
-    messages = data.get('messages')
+    recipient = data.get('recipient')
+    content = data.get('content')
+    timestamp = datetime.now()
 
-    # Check if all required fields are present
-    if not messages:
-        return jsonify({'message': 'nothing sent'}), 400
+    if not all([sender, recipient, content]):
+        return jsonify({'message': 'Missing required fields'}), 400
 
     try:
-        chat_collection.insert_one({
-            'sendee': sendee,
-            'sender': sender,
-            'messages': messages
-        })
-        return jsonify({'message': 'Sent!'}), 201
-    except Exception as e:
-        return jsonify({'message': f'An error occurred: {str(e)}'}), 500
+        # Create a unique conversation ID by sorting usernames
+        conv_users = sorted([sender, recipient])
+        conv_id = f"{conv_users[0]}_{conv_users[1]}"
 
-@app.route('/getmsg', methods=['GET'])
-def get_msg():
-    data = list(chat_collection.find({}))
-    messagedict = {}
-    for i in data:
-        messagedict.update({
-            i.get('sender') : 
-            []
+        # Create or update conversation
+        conversations_collection.update_one(
+            {'conversation_id': conv_id},
+            {
+                '$setOnInsert': {
+                    'participants': conv_users,
+                    'created_at': timestamp
+                },
+                '$push': {
+                    'messages': {
+                        'sender': sender,
+                        'content': content,
+                        'timestamp': timestamp
+                    }
+                }
+            },
+            upsert=True
+        )
+        return jsonify({'message': 'Message sent successfully'}), 201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/chat/conversations/<username>', methods=['GET'])
+def get_conversations(username):
+    try:
+        # Find all conversations where user is a participant
+        conversations = conversations_collection.find({
+            'participants': username
         })
-    for i in data:
-        messagedict[i.get('sender')].extend([i.get('sendee'), i.get('messages'), '----'])
-    return jsonify(messagedict)
+        
+        result = []
+        for conv in conversations:
+            result.append({
+                'conversation_id': conv['conversation_id'],
+                'participants': conv['participants'],
+                'messages': conv.get('messages', [])
+            })
+        
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
