@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';  // Add this import at the top
 import './Catalogue.css';
 import logo from './LoOhmWh.png';
 import addsymbol from './OhmSA.png';
 import axios from 'axios';
-
+import Header from './Header';  // Add this import
 
 function Catalogue() {
     const [tableData, setTableData] = useState([]);
@@ -24,6 +25,8 @@ function Catalogue() {
         tags: '',
         image: ''
     });
+
+    const navigate = useNavigate();  // Add this line after your useState declarations
 
     // Fetch items from backend when component mounts
     useEffect(() => {
@@ -134,6 +137,14 @@ function Catalogue() {
         setSortConfig({ key, direction });
     };
 
+    const handleChatClick = () => {
+        navigate('/chat');
+    };
+
+    const handleProfileClick = () => {
+        navigate('/profile');
+    };
+
     if (isLoading) {
         return <div>Loading...</div>;
     }
@@ -144,24 +155,11 @@ function Catalogue() {
 
     return (
         <div className="catalogue-container">
-            <header className="cat-header">
-                <div className="header-content">
-                    <div className="header-logo">
-                        <img 
-                            src={logo}
-                            alt="Company Logo" 
-                            className="logo-image"
-                        />
-                    </div>
-                    <nav className="header-nav">
-                        <button className="header-btn">Profile</button>
-                        <button className="header-btn">Products</button>
-                        <button className="header-btn">Categories</button>
-                        <button className="header-btn">Cart</button>
-                    </nav>
-                </div>
-            </header>
+            <Header />
             <main className="catalogue-content">
+                {/* Add heading */}
+                <h1 className="catalogue-title">Catalogue</h1>
+                
                 {/* Search Input */}
                 <div className="search-container">
                     <input
