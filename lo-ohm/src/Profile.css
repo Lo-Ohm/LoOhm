@@ -1,0 +1,74 @@
+@import './variables.css';
+
+.profile-container {
+    min-height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.profile-content {
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+    padding: var(--content-padding);
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.profile-info {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    gap: 20px;
+    max-width: 100%;  /* Ensure it stays within parent */
+}
+
+.profile-picture {
+    flex: 0 0 200px;
+    text-align: center;
+}
+
+.profile-picture img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.profile-details {
+    flex: 1;
+}
+
+.profile-details form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.profile-details input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.profile-details button {
+    padding: 8px 16px;
+    background-color: #005503;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.profile-details button:hover {
+    background-color: #044f09;
+}
+
+.message {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 4px;
+}
