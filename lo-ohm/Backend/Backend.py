@@ -18,8 +18,6 @@ import base64
 
 load_dotenv(dotenv_path='lo-ohm/Backend/global.env')
 
-print(os.getenv("TEST_VAR"))
-
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = os.getenv("JWT_SECRET_KEY")
 jwt = JWTManager(app)
@@ -109,8 +107,6 @@ def signup():
             'is_verified': False,
             'profilePicture': default_pfp_base64  # Assign default pfp
         })
-
-        print("PFPF: ", default_pfp_base64)
 
         # Send verification email
         token = serializer.dumps(email)
@@ -337,6 +333,64 @@ def update_profile():
         return jsonify({'message': 'Profile updated successfully'})
     
     return jsonify({'message': 'No updates provided'}), 400
+
+
+
+# Add an item to the cart
+@app.route('/cart/add', methods=['POST'])
+@jwt_required()
+def add_to_cart():
+    data = request.json
+    current_user = get_jwt_identity()
+    product_id = data.get('product_id')
+
+    if not product_id:
+        return jsonify({'message': 'Product ID is required.'}), 400
+
+    try:
+        user_info_collection.update_one(
+            {'username': current_user},
+            {'$addToSet': {'cart': product_id}}  # Avoid duplicates
+        )
+        return jsonify({'message': 'Product added to cart'}), 200
+    except Exception as e:
+        return jsonify({'message': f'Error adding to cart: {str(e)}'}), 500
+
+# Get the user's cart
+@app.route('/cart', methods=['GET'])
+@jwt_required()
+def get_cart():
+    current_user = get_jwt_identity()
+
+    try:
+        user = user_info_collection.find_one({'username': current_user}, {'cart': 1, '_id': 0})
+        cart = user.get('cart', [])
+        return jsonify({'cart': cart}), 200
+    except Exception as e:
+        return jsonify({'message': f'Error fetching cart: {str(e)}'}), 500
+
+
+# Remove an item from the cart
+@app.route('/cart/remove', methods=['POST'])
+@jwt_required()
+def remove_from_cart():
+    data = request.json
+    current_user = get_jwt_identity()
+    product_id = data.get('product_id')
+
+    if not product_id:
+        return jsonify({'message': 'Product ID is required.'}), 400
+
+    try:
+        user_info_collection.update_one(
+            {'username': current_user},
+            {'$pull': {'cart': product_id}}  # Remove the product from the cart
+        )
+        return jsonify({'message': 'Product removed from cart'}), 200
+    except Exception as e:
+        return jsonify({'message': f'Error removing from cart: {str(e)}'}), 500
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
