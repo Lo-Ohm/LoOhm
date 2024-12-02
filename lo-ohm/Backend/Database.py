@@ -14,3 +14,4 @@ client = MongoClient(uri, server_api=ServerApi('1'))
 db = client['Main_DB']
 collection = db['Info']
 user_info_collection = db['user_info']
+chat_collection = db['chatbox']

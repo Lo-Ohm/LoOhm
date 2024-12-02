@@ -171,5 +171,40 @@ def get_ia():
         })
     return jsonify(itemary)
 
+#------------------------ CHATTING ------------------------#
+@app.route('/sendmsg', methods=['POST'])
+def send_message():
+    data = request.json
+    sendee = data.get('sendee')
+    sender = data.get('sender')
+    messages = data.get('messages')
+
+    # Check if all required fields are present
+    if not messages:
+        return jsonify({'message': 'nothing sent'}), 400
+
+    try:
+        chat_collection.insert_one({
+            'sendee': sendee,
+            'sender': sender,
+            'messages': messages
+        })
+        return jsonify({'message': 'Sent!'}), 201
+    except Exception as e:
+        return jsonify({'message': f'An error occurred: {str(e)}'}), 500
+
+@app.route('/getmsg', methods=['GET'])
+def get_msg():
+    data = list(chat_collection.find({}))
+    messagedict = {}
+    for i in data:
+        messagedict.update({
+            i.get('sender') : 
+            []
+        })
+    for i in data:
+        messagedict[i.get('sender')].extend([i.get('sendee'), i.get('messages'), '----'])
+    return jsonify(messagedict)
+
 if __name__ == '__main__':
     app.run(debug=True)
