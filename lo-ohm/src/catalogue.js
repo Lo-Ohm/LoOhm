@@ -92,10 +92,18 @@ function Catalogue() {
 
     const handleAddItem = async (e) => {
         e.preventDefault();
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:5000/usernameinfo', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const data = await response.json();
+
         try {
             // You might want to get the username from a logged-in user context
             const itemToAdd = {
-                username: 'currentUser', // Replace with actual username
+                username: data, // Replace with actual username
                 ...newItem
             };
 
